@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Assignment3NRA
+namespace ClientNamespace
 {
-    class Program
+    class Client
     {
         static void Main(string[] args)
         {

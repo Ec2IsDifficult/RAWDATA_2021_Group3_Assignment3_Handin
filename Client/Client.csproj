@@ -3,11 +3,6 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>Assignment3NRA</RootNamespace>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Assignment3TestSuite\Assignment3TestSuite.csproj" />
-    </ItemGroup>
 
 </Project>

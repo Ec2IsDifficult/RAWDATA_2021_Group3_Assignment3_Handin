@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using Utilities; 
+
 namespace Server
 {
     class ServerProgram
@@ -21,7 +21,7 @@ namespace Server
                 Console.WriteLine("Client connected!");
 
                 var message = client.Read();
-                Console.WriteLine($"Message from client {message}");
+                Console.WriteLine("Message from client" + message);
                 break;
             }
         }

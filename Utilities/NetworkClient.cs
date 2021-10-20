@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Text;
 
 namespace Utilities
@@ -23,5 +22,8 @@ namespace Utilities
             var msgCount = _client.GetStream().Read(buffer);
             return Encoding.UTF8.GetString(buffer, 0, msgCount);
         }
+        
+        static void Main(string[] args){
+        }
     }
-}
+}    

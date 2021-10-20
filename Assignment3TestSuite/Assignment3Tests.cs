@@ -10,8 +10,6 @@ using System.Text.Json.Serialization;
 using Xunit;
 
 
-
-
 namespace Assignment3TestSuite
 {
 
@@ -33,14 +31,13 @@ namespace Assignment3TestSuite
     {
         private const int Port = 5000;
 
-#if COMMENT
-        //////////////////////////////////////////////////////////
-        /// 
-        /// Testing Constrains
-        /// 
-        ////////////////////////////////////////////////////////// 
-
         [Fact]
+        public void BasicTest()
+        {
+            Assert.True(false);
+        }
+
+/*       [Fact]
         public void Constraint_ConnectionWithoutRequest_ShouldConnect()
         {
             var client = Connect();
@@ -49,7 +46,7 @@ namespace Assignment3TestSuite
 
         /*    Method Tests     */
 
-        [Fact]
+  /*      [Fact]
         public void Constraint_RequestWithoutMethod_MissingMethodError()
         {
             var client = Connect();
@@ -61,6 +58,7 @@ namespace Assignment3TestSuite
             Assert.Contains("missing method", response.Status.ToLower());
         }
 
+//if comment
         [Fact]
         public void Constraint_RequestWithUnknownMethod_IllegalMethodError()
         {
@@ -103,7 +101,7 @@ namespace Assignment3TestSuite
         }
 
         /* Date Tests    */
-
+/*
         [Fact]
         public void Constraint_RequestWithoutDate_MissingDateError()
         {
@@ -126,7 +124,7 @@ namespace Assignment3TestSuite
                 Method = "update",
                 Path = "testing",
                 Date = DateTimeOffset.Now.ToString(),
-                Body = (new { cid = 1, Name = "Beverages"}).ToJson()
+                Body = (new {cid = 1, Name = "Beverages"}).ToJson()
             };
 
             client.SendRequest(request.ToJson());
@@ -136,7 +134,7 @@ namespace Assignment3TestSuite
         }
 
         /* Body Tests    */
-
+/*
         [Theory]
         [InlineData("create")]
         [InlineData("update")]
@@ -158,7 +156,7 @@ namespace Assignment3TestSuite
             Assert.Contains("missing body", response.Status.ToLower());
         }
 
-        
+
         [Fact]
         public void Constraint_RequestUpdateWithoutJsonBody_IllegalBodyError()
         {
@@ -181,6 +179,8 @@ namespace Assignment3TestSuite
         }
 
         /* Echo Test */
+
+/*
         [Fact]
         public void Echo_RequestWithBody_ReturnsBody()
         {
@@ -207,7 +207,7 @@ namespace Assignment3TestSuite
         ////////////////////////////////////////////////////////// 
 
         /* Path tests  */
-
+/*
         [Fact]
         public void Constraint_RequestWithInvalidPath_StatusBadRequest()
         {
@@ -222,8 +222,8 @@ namespace Assignment3TestSuite
 
             client.SendRequest(request.ToJson());
             var response = client.ReadResponse();
-            
-            var expectedResponse = new Response { Status = "4 Bad Request" };
+
+            var expectedResponse = new Response {Status = "4 Bad Request"};
 
             Assert.Equal(expectedResponse.ToJson().ToLower(), response.ToJson().ToLower());
         }
@@ -242,8 +242,8 @@ namespace Assignment3TestSuite
 
             client.SendRequest(request.ToJson());
             var response = client.ReadResponse();
-            
-            var expectedResponse = new Response { Status = "4 Bad Request" };
+
+            var expectedResponse = new Response {Status = "4 Bad Request"};
 
             Assert.Equal(expectedResponse.ToJson().ToLower(), response.ToJson().ToLower());
         }
@@ -258,13 +258,13 @@ namespace Assignment3TestSuite
                 Method = "create",
                 Path = "/api/categories/1",
                 Date = UnixTimestamp(),
-                Body = (new { Name = "" }).ToJson()
+                Body = (new {Name = ""}).ToJson()
             };
 
             client.SendRequest(request.ToJson());
             var response = client.ReadResponse();
-            
-            var expectedResponse = new Response { Status = "4 Bad Request" };
+
+            var expectedResponse = new Response {Status = "4 Bad Request"};
 
             Assert.Equal(expectedResponse.ToJson().ToLower(), response.ToJson().ToLower());
         }
@@ -279,13 +279,13 @@ namespace Assignment3TestSuite
                 Method = "update",
                 Path = "/api/categories",
                 Date = UnixTimestamp(),
-                Body = (new { Name = "" }).ToJson()
+                Body = (new {Name = ""}).ToJson()
             };
 
             client.SendRequest(request.ToJson());
             var response = client.ReadResponse();
-            
-            var expectedResponse = new Response { Status = "4 Bad Request" };
+
+            var expectedResponse = new Response {Status = "4 Bad Request"};
 
             Assert.Equal(expectedResponse.ToJson().ToLower(), response.ToJson().ToLower());
         }
@@ -304,8 +304,8 @@ namespace Assignment3TestSuite
 
             client.SendRequest(request.ToJson());
             var response = client.ReadResponse();
-            
-            var expectedResponse = new Response { Status = "4 Bad Request" };
+
+            var expectedResponse = new Response {Status = "4 Bad Request"};
 
             Assert.Equal(expectedResponse.ToJson().ToLower(), response.ToJson().ToLower());
         }
@@ -313,7 +313,7 @@ namespace Assignment3TestSuite
 
 
         /* Read tests */
-
+/*
         [Fact]
         public void Request_ReadCategories_StatusOkAndListOfCategoriesInBody()
         {
@@ -328,7 +328,7 @@ namespace Assignment3TestSuite
 
             client.SendRequest(request.ToJson());
             var response = client.ReadResponse();
-            
+
             var categories = new List<object>
             {
                 new {cid = 1, name = "Beverages"},
@@ -359,11 +359,11 @@ namespace Assignment3TestSuite
 
             client.SendRequest(request.ToJson());
             var response = client.ReadResponse();
-            
+
             var expectedResponse = new Response
             {
                 Status = "1 Ok",
-                Body = (new { cid = 1, name = "Beverages" }.ToJson())
+                Body = (new {cid = 1, name = "Beverages"}.ToJson())
             };
 
             Assert.Equal(expectedResponse.ToJson(), response.ToJson());
@@ -389,7 +389,7 @@ namespace Assignment3TestSuite
 
 
         /* Update tests  */
-
+/*
         [Fact]
         public void Request_UpdateCategoryWithValidIdAndBody_StatusUpdated()
         {
@@ -400,7 +400,7 @@ namespace Assignment3TestSuite
                 Method = "update",
                 Path = "/api/categories/1",
                 Date = UnixTimestamp(),
-                Body = (new { cid = 1, name = "BeveragesTesting" }).ToJson()
+                Body = (new {cid = 1, name = "BeveragesTesting"}).ToJson()
             };
 
             client.SendRequest(request.ToJson());
@@ -418,7 +418,7 @@ namespace Assignment3TestSuite
                 Method = "update",
                 Path = "/api/categories/1",
                 Date = UnixTimestamp(),
-                Body = (new { cid = 1, name = "Beverages" }).ToJson()
+                Body = (new {cid = 1, name = "Beverages"}).ToJson()
             };
 
             client.SendRequest(resetRequest.ToJson());
@@ -435,7 +435,7 @@ namespace Assignment3TestSuite
                 Method = "update",
                 Path = "/api/categories/1",
                 Date = UnixTimestamp(),
-                Body = (new { cid = 1, name = "BeveragesTesting" }).ToJson()
+                Body = (new {cid = 1, name = "BeveragesTesting"}).ToJson()
             };
 
             client.SendRequest(request.ToJson());
@@ -463,7 +463,7 @@ namespace Assignment3TestSuite
                 Method = "update",
                 Path = "/api/categories/1",
                 Date = UnixTimestamp(),
-                Body = (new { cid = 1, name = "Beverages" }).ToJson()
+                Body = (new {cid = 1, name = "Beverages"}).ToJson()
             };
 
             client.SendRequest(resetRequest.ToJson());
@@ -480,7 +480,7 @@ namespace Assignment3TestSuite
                 Method = "update",
                 Path = "/api/categories/123",
                 Date = UnixTimestamp(),
-                Body = (new { cid = 1, name = "BeveragesTesting" }).ToJson()
+                Body = (new {cid = 1, name = "BeveragesTesting"}).ToJson()
             };
 
             client.SendRequest(request.ToJson());
@@ -491,7 +491,7 @@ namespace Assignment3TestSuite
 
 
         /* Create Tests  */
-
+/*
         [Fact]
         public void Request_CreateCategoryWithValidBodyArgument_CreateNewCategory()
         {
@@ -502,7 +502,7 @@ namespace Assignment3TestSuite
                 Method = "create",
                 Path = "/api/categories",
                 Date = UnixTimestamp(),
-                Body = (new { name = "Testing" }).ToJson()
+                Body = (new {name = "Testing"}).ToJson()
             };
 
             client.SendRequest(request.ToJson());
@@ -529,7 +529,7 @@ namespace Assignment3TestSuite
 
 
         /* Delete Tests  */
-
+/*
         [Fact]
         public void Request_DeleteCategoryWithValidId_RemoveCategory()
         {
@@ -540,7 +540,7 @@ namespace Assignment3TestSuite
                 Method = "create",
                 Path = "/api/categories",
                 Date = UnixTimestamp(),
-                Body = (new { name = "TestingDeleteCategory" }).ToJson()
+                Body = (new {name = "TestingDeleteCategory"}).ToJson()
             };
 
             client.SendRequest(request.ToJson());
@@ -576,9 +576,6 @@ namespace Assignment3TestSuite
 
             Assert.Contains("5 not found", response.Status.ToLower());
         }
-
-#endif
-
 
         /**********************************************************
          * 

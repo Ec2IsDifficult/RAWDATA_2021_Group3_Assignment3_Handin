@@ -8,6 +8,8 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Xunit;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 
 namespace Assignment3TestSuite
@@ -30,14 +32,8 @@ namespace Assignment3TestSuite
     public class Assignment3Tests
     {
         private const int Port = 5000;
-
-        [Fact]
-        public void BasicTest()
-        {
-            Assert.True(false);
-        }
-
-/*       [Fact]
+        
+       [Fact]
         public void Constraint_ConnectionWithoutRequest_ShouldConnect()
         {
             var client = Connect();
@@ -45,8 +41,8 @@ namespace Assignment3TestSuite
         }
 
         /*    Method Tests     */
-
-  /*      [Fact]
+        
+        [Fact]
         public void Constraint_RequestWithoutMethod_MissingMethodError()
         {
             var client = Connect();
@@ -54,7 +50,6 @@ namespace Assignment3TestSuite
             client.SendRequest("{}");
 
             var response = client.ReadResponse();
-
             Assert.Contains("missing method", response.Status.ToLower());
         }
 
@@ -101,7 +96,7 @@ namespace Assignment3TestSuite
         }
 
         /* Date Tests    */
-/*
+
         [Fact]
         public void Constraint_RequestWithoutDate_MissingDateError()
         {
@@ -115,7 +110,7 @@ namespace Assignment3TestSuite
         }
 
         [Fact]
-        public void Constraint_RequestWhereDateIsNotUnixTime_IllegalDateError()
+ /*       public void Constraint_RequestWhereDateIsNotUnixTime_IllegalDateError()
         {
             var client = Connect();
 

@@ -1,28 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Net.Http.Json;
 using System.Net.Sockets;
-using System.Reflection;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Microsoft.VisualBasic.CompilerServices;
 using Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace Server
 {
     class ServerProgram
     {
         private Category _category;
-        private List<string> _methodList = new List<string>{"create", "read", "update","delete", "echo"};
-        private List<string> _needsBodyList = new List<string>{"create", "update", "echo"};
+        private readonly List<string> _methodList = new List<string>{"create", "read", "update","delete", "echo"};
+        private readonly List<string> _needsBodyList = new List<string>{"create", "update", "echo"};
         private TcpListener _server;
 
+        static void Main()
+        {
+            ServerProgram server = new ServerProgram();
+            server.StartServer();
+        }
+        
         public void StartServer()
         {
             _category = new Category();
@@ -45,7 +47,7 @@ namespace Server
             
         }
 
-        public bool TreatClient(NetworkClient client)
+        public void TreatClient(NetworkClient client)
         {
             ErrorResponseClass errorResponseClass = new ErrorResponseClass();
             
@@ -69,8 +71,12 @@ namespace Server
             }
             else
             {
-                string archUnix = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
-                if (!(received.date.Length == archUnix.Length && Regex.IsMatch(received.date, "[0-9]*")))
+                try
+                {
+                    var sentDate = long.Parse(received.date);
+                    DateTimeOffset.FromUnixTimeSeconds(sentDate).DateTime.ToLocalTime();
+                }
+                catch
                 {
                     errorResponseClass.ExpandResponse("illegal date");
                 }
@@ -87,13 +93,13 @@ namespace Server
                 if (received.method != "echo")
                 {
                     if (received.body.StartsWith('{') && received.body.EndsWith('}') ||
-                        received.body.StartsWith('[') && received.body.EndsWith('}'))
+                        received.body.StartsWith('[') && received.body.EndsWith(']'))
                     {
                         try
                         {
-                            var attempt = JObject.Parse(received.body);
+                            JsonConvert.DeserializeObject<dynamic>(received.body);
                         }
-                        catch (JsonReaderException e)
+                        catch
                         {
                             errorResponseClass.ExpandResponse("illegal body");
                         }
@@ -108,7 +114,7 @@ namespace Server
             if (errorResponseClass.status != null)
             {
                 SendErrorResponse(errorResponseClass, client);
-                return false;
+                return;
             }
 
             SuccesfullResponseClass succesfullResponseClass = new SuccesfullResponseClass();
@@ -117,7 +123,7 @@ namespace Server
             {
                 succesfullResponseClass.body = received.body;
                 SendSuccesfullResponse(succesfullResponseClass, client);
-                return true;
+                return;
             }
 
             if (received.path != null)
@@ -127,7 +133,6 @@ namespace Server
                     var check = _category.ReturnDatabase();
                     if(check.ContainsKey(index))
                     {
-                        
                         switch (received.method)
                         {
                             case "read":
@@ -153,7 +158,6 @@ namespace Server
                     }
                     else
                     {
-                        Console.WriteLine("Not found");
                         errorResponseClass.ExpandResponse("5 not found");
                         SendErrorResponse(errorResponseClass, client);
                     }
@@ -167,7 +171,8 @@ namespace Server
                             SendSuccesfullResponse(succesfullResponseClass, client);
                             break;
                         case "create":
-                            int newIndex = _category.CreateRow(received.body);
+                            dynamic results = JsonConvert.DeserializeObject<dynamic>(received.body);
+                            int newIndex = _category.CreateRow(results);
                             succesfullResponseClass.body = JsonConvert.SerializeObject(_category.ReadRow(newIndex));
                             succesfullResponseClass.status = "2 Created";
                             Console.WriteLine(succesfullResponseClass.body);
@@ -185,27 +190,18 @@ namespace Server
                     SendErrorResponse(errorResponseClass, client);
                 }
             }
-            return true;
         }
 
-        public void SendErrorResponse(ErrorResponseClass errorResponse, NetworkClient client)
+        private void SendErrorResponse(ErrorResponseClass errorResponse, NetworkClient client)
         {
             string json = JsonConvert.SerializeObject(errorResponse);
             client.Write(json);
         }
         
-        public void SendSuccesfullResponse(SuccesfullResponseClass succesfullResponse, NetworkClient client)
+        private void SendSuccesfullResponse(SuccesfullResponseClass succesfullResponse, NetworkClient client)
         {
             string json = JsonConvert.SerializeObject(succesfullResponse);
             client.Write(json);
-        }
-    }
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            ServerProgram server = new ServerProgram();
-            server.StartServer();
         }
     }
 }
@@ -266,12 +262,10 @@ public class Category
     {
         return _database[cid];
     }
-    public int CreateRow(string inInput)
+    public int CreateRow(dynamic input)
     {
         int newIndex = _database.Count + 1;
-        var json = JObject.Parse(inInput);
-        var jname = json["name"];
-        _database.Add(newIndex, new {cid = newIndex, name = jname});
+        _database.Add(newIndex, new {cid = newIndex, input.name});
         return newIndex;
     }
     

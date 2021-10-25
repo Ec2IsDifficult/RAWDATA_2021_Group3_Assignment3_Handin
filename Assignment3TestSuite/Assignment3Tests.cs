@@ -110,7 +110,7 @@ namespace Assignment3TestSuite
         }
 
         [Fact]
- /*       public void Constraint_RequestWhereDateIsNotUnixTime_IllegalDateError()
+        public void Constraint_RequestWhereDateIsNotUnixTime_IllegalDateError()
         {
             var client = Connect();
 
@@ -121,15 +121,12 @@ namespace Assignment3TestSuite
                 Date = DateTimeOffset.Now.ToString(),
                 Body = (new {cid = 1, Name = "Beverages"}).ToJson()
             };
-
             client.SendRequest(request.ToJson());
             var response = client.ReadResponse();
-
             Assert.Contains("illegal date", response.Status.ToLower());
         }
 
         /* Body Tests    */
-/*
         [Theory]
         [InlineData("create")]
         [InlineData("update")]
@@ -175,7 +172,7 @@ namespace Assignment3TestSuite
 
         /* Echo Test */
 
-/*
+
         [Fact]
         public void Echo_RequestWithBody_ReturnsBody()
         {
@@ -202,12 +199,12 @@ namespace Assignment3TestSuite
         ////////////////////////////////////////////////////////// 
 
         /* Path tests  */
-/*
+
         [Fact]
         public void Constraint_RequestWithInvalidPath_StatusBadRequest()
         {
             var client = Connect();
-
+            
             var request = new
             {
                 Method = "read",
@@ -285,7 +282,7 @@ namespace Assignment3TestSuite
             Assert.Equal(expectedResponse.ToJson().ToLower(), response.ToJson().ToLower());
         }
 
-        [Fact]
+        [Fact] 
         public void Constraint_DeleteWithOutPathId_StatusBadRequest()
         {
             var client = Connect();
@@ -308,12 +305,11 @@ namespace Assignment3TestSuite
 
 
         /* Read tests */
-/*
+
         [Fact]
         public void Request_ReadCategories_StatusOkAndListOfCategoriesInBody()
         {
             var client = Connect();
-
             var request = new
             {
                 Method = "read",
@@ -340,8 +336,7 @@ namespace Assignment3TestSuite
             Assert.Equal(expectedResponse.ToJson(), response.ToJson());
         }
 
-        [Fact]
-        public void Request_ReadCategoryWithValidId_StatusOkAndCategoryInBody()
+        [Fact] public void Request_ReadCategoryWithValidId_StatusOkAndCategoryInBody()
         {
             var client = Connect();
 
@@ -384,7 +379,7 @@ namespace Assignment3TestSuite
 
 
         /* Update tests  */
-/*
+
         [Fact]
         public void Request_UpdateCategoryWithValidIdAndBody_StatusUpdated()
         {
@@ -486,7 +481,7 @@ namespace Assignment3TestSuite
 
 
         /* Create Tests  */
-/*
+
         [Fact]
         public void Request_CreateCategoryWithValidBodyArgument_CreateNewCategory()
         {
@@ -524,7 +519,7 @@ namespace Assignment3TestSuite
 
 
         /* Delete Tests  */
-/*
+
         [Fact]
         public void Request_DeleteCategoryWithValidId_RemoveCategory()
         {
